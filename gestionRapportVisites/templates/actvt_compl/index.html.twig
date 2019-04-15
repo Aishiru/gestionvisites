@@ -3,89 +3,89 @@
 {% block title %}Liste Activité Complémentaire{% endblock %}
 
 {% block body %}
-    <div class="fondgris">
-        <div class="container corp">
-            <div class="columns">
-                <div class="column is-1"></div>
-                <div class="column">
-                    <a href="">
-                        <h1 class="title is-3 has-text-white">Liste des activités complémentaires prévues</h1>
-                    </a>
-                    <h1 class="subtitle is-5 has-text-white">----------------------------</h1>
-                </div>
-                <div class="column is-1"></div>
+<div class="fondgris">
+    <div class="container corp">
+        <div class="columns">
+            <div class="column is-1"></div>
+            <div class="column">
+                <a href="">
+                    <h1 class="title is-3 has-text-white">Liste des activités complémentaires prévues</h1>
+                </a>
+                <h1 class="subtitle is-5 has-text-white">----------------------------</h1>
             </div>
-
-            <div class="columns">
-                <div class="column is-1"></div>
-                <div class="column is-3">
-                    <a href="{{ path(" ajouteractivite") }}"="ajouterActivite") }}"" class="button is-primary">
-                        <span class="icon">
-                            <i class="fas fa-plus"></i>
-                        </span><span>Ajouter évènement</span></a>
-                </div>
-                <div class="column is-3 is-offset-3">
-
-                    {{ form_start(searchForm) }}
-                    {{ form_row(searchForm.search) }}
-
-                </div>
-                <div class="column is-1">
-                    <button type="submit" class="button is-primary">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    {{ form_end(searchForm) }}
-                </div>
-                <div class="column is-1"></div>
-            </div>
-            <br><br>
-            <div class="columns">
-                <div class="column is-1"></div>
-                {% for activite in activites %}
-
-                    <div class="column">
-                        <div class="box">
-                            <article class="media">
-                                <div class="media-content">
-                                    <div class="content">
-                                        <p>
-                                            <strong>Activité n°
-                                                {{ activite.id }}</strong>
-                                            <br>
-                                            Date :
-                                            {{ activite.date | date("d/m/Y")}}
-                                            <br>
-                                            Lieu :
-                                            {{ activite.lieu }}
-                                            <br>
-                                            Theme :
-                                            {{ activite.theme }}
-                                            <br>
-                                            <a href=" {{ path(" showactivite", { "="showActivite", { "" id" : activite.id } ) }}"="id" : activite.id } ) }}"">Voir plus</a>
-                                        </p>
-                                    </div>
-                                    <nav class="level is-mobile">
-                                        <div class="level-left">
-                                            <a href="{{ path(" modifieractivite", {"="modifierActivite", {"" id" : activite.id }) }}"="id" : activite.id }) }}"" class="level-item" aria-label="Modifier">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-wrench"></i>
-                                                </span>
-                                            </a>
-                                            <a href="{{ path(" supprimeractivite", {"="supprimerActivite", {"" id" : activite.id }) }}"="id" : activite.id }) }}"" class="level-item" aria-label="Suprimer" onclick="return confirm('Êtes-vous sûr ?')">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-times"></i>
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </nav>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                {% endfor %}
-                <div class="column is-1"></div>
-            </div>
-
+            <div class="column is-1"></div>
         </div>
+
+        <div class="columns">
+            <div class="column is-1"></div>
+            <div class="column is-3">
+                <a href="{{ path("ajouterActivite") }}" class="button is-primary">
+                    <span class="icon">
+                        <i class="fas fa-plus"></i>
+                    </span><span>Ajouter évènement</span></a>
+            </div>
+            <div class="column is-3 is-offset-3">
+
+                {{ form_start(searchForm) }}
+                {{ form_row(searchForm.search) }}
+
+            </div>
+            <div class="column is-1">
+                <button type="submit" class="button is-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+                {{ form_end(searchForm) }}
+            </div>
+            <div class="column is-1"></div>
+        </div>
+        <br><br>
+        <div class="columns is-multiline">
+            {# <div class="column is-1"></div> #}
+            {% for activite in activites %}
+
+            <div class="column is-3">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>Activité n°
+                                        {{ activite.id }}</strong>
+                                    <br>
+                                    Date :
+                                    {{ activite.date | date("d/m/Y")}}
+                                    <br>
+                                    Lieu :
+                                    {{ activite.lieu }}
+                                    <br>
+                                    Theme :
+                                    {{ activite.theme }}
+                                    <br>
+                                    <a href=" {{ path("showActivite", { "id" : activite.id } ) }}">Voir plus</a>
+                                </p>
+                            </div>
+                            <nav class="level is-mobile">
+                                <div class="level-left">
+                                    <a href="{{ path("modifierActivite", {"id" : activite.id }) }}" class="level-item" aria-label="Modifier">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-wrench"></i>
+                                        </span>
+                                    </a>
+                                    <a href="{{ path("supprimerActivite", {"id" : activite.id }) }}" class="level-item" aria-label="Suprimer" onclick="return confirm('Êtes-vous sûr ?')">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            {% endfor %}
+            {# <div class="column is-1"></div> #}
+        </div>
+
     </div>
+</div>
 {% endblock %}

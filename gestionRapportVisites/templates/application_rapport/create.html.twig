@@ -1,63 +1,169 @@
 {% extends 'base.html.twig' %}
 
+{% import _self as renderJobMacro %}
+{% macro offrirs(offrir) %}
+<li>
+    <div class="columns">
+        <div class="column is-3">
+            <div>
+                {{ form_label(offrir.medicament) }}
+            </div>
+            <div class="select">
+                {{ form_widget(offrir.medicament) }}
+            </div>
+        </div>
+        <div class="column">
+            <div>
+                {{ form_label(offrir.off_qte) }}
+            </div>
+            <div class="control">
+                {{ form_widget(offrir.off_qte) }}
+            </div>
+        </div>
+        <div class="column delete_medic">
+        <br>
+        </div>
+    </div>
+</li>
+{% endmacro %}
+
 {% block title %}Liste medicaments{% endblock %}
 
 {% block body %}
-    <div class="fondgris">
-        <div class="container corpformrap">
+<div class="fondgris">
+    <div class="container corpformrap">
 
-            <div class="columns">
-                <div class="column is-2"></div>
-                <div class="column">
-                    <div class="box">
-                        <div class="margform">
+        <div class="columns">
+            <div class="column is-2"></div>
+            <div class="column">
+
+                <div class="box">
+                    <div class="margform">
+                        <h1 class="title is-3 has-text-dark margform">
                             {% if editMode == true %}
-                                <h1 class="title is-3 has-text-dark has-text-centered">Modifier un rapport de visite</h1>
+                            Modifier
                             {% else %}
-                                <h1 class="title is-3 has-text-dark has-text-centered">Ajouter un rapport de visite</h1>
+                            Ajouter
                             {% endif %}
-                            <h1 class="subtitle is-5 has-text-dark has-text-centered">----------------------------</h1>
-                            {{ form_start(formRapportVisite) }}
-                            <div>
-                            <div>
-                            {{ form_label(formRapportVisite.praticien) }}
+                            un rapport de visite</h1>
+                        <h1 class="subtitle is-5 has-text-dark margform">----------------------------</h1>
+                        {{ form_start(formRapportVisite) }}
+                        <div class="columns">
+                            <div class="column is-6">
+                                <div>
+                                    {{ form_label(formRapportVisite.praticien) }}
+                                </div>
+                                <div class="select">
+                                    {{ form_widget(formRapportVisite.praticien) }}
+                                </div>
                             </div>
-                            <div class="select">
-                            {{ form_widget(formRapportVisite.praticien) }}
+                            <div class="column is-6">
+                                <div>
+                                    {{ form_label(formRapportVisite.visiteur) }}
+                                </div>
+                                <div class="select">
+                                    {{ form_widget(formRapportVisite.visiteur )}}
+                                </div>
                             </div>
-                            </div>
-                            <br>
-                            <div class="formpad1">
-                            {{ form_row(formRapportVisite.rap_motif) }}
-                            </div>
-                            <br>
-                            <div class="formpad1">
-                            {{ form_row(formRapportVisite.rap_bilan) }}
-                            </div>
-                            <div class="formpad1">
-                                {% for offrir in formRapportVisite.offrirs %}
-                                    {{ form_row(offrir.medicament) }}
-                                    {{ form_row(offrir.off_qte) }}
-                                {% endfor %}
-                            </div>
+                        </div>
+                        {{ form_row(formRapportVisite.rap_motif) }}
+                        <br>
+                        {{ form_row(formRapportVisite.rap_bilan) }}
+                        <br>
+                        <ul class="offrir" data-prototype="{{ renderJobMacro.offrirs(formRapportVisite.offrirs.vars.prototype)|e }}">
+                            {% for offrir in formRapportVisite.offrirs %}
+                            {{ renderJobMacro.offrirs(offrir)}}
+                            {% endfor %}
+                        </ul>
 
-                            <div>
-                            <button type="submit" class="button is-primary" style="margin-top:4%;">
+                        <div>
+                            <button type="submit" class="button is-primary" style="margin-top:4%">
                                 {% if editMode == true %}
-                                    Enregistrer les modifications
+                                Enregistrer les modifications
                                 {% else %}
-                                    Ajouter le rapport
+                                Poster le rapport
                                 {% endif %}
                             </button>
-                            </div>
-
-                            {{ form_end(formRapportVisite) }}
                         </div>
+
+                        {{ form_end(formRapportVisite) }}
                     </div>
                 </div>
-                <div class="column is-2"></div>
             </div>
-
+            <div class="column is-2"></div>
         </div>
+
     </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+<script>
+
+    var $collectionHolder;
+
+    var $addTagButton = $(
+        '<button type="button" class="add_tag_link button is-link is-small" style="margin-bot:4%"><i class="fas fa-plus"></i>Ajouter un medicament</button>'
+    );
+    var $newLinkLi = $('<li></li>').append($addTagButton);
+
+    jQuery(document).ready(function () {
+        // Get the ul that holds the collection of offrir
+        $collectionHolder = $('ul.offrir');
+
+        // add a delete link to all of the existing tag form li elements
+        $collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+
+        // add the "ajouter un medicament" anchor and li to the tags ul
+        $collectionHolder.prepend($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addTagButton.on('click', function (e) {
+            // add a new medicament form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    });
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype 
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        var newForm = prototype;
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        newForm = newForm.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+
+        // Display the form in the page in an li, before the "Ajouter un medicament" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+        addTagFormDeleteLink($newFormLi);
+        $newLinkLi.append($newFormLi);
+    }
+
+    function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormButton = $('<button class="delete is-medium" type="button"></button>');
+    $tagFormLi.find('.delete_medic').append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+        // remove the li for the medicament form
+        $tagFormLi.remove();
+    });
+}
+</script>
 {% endblock %}

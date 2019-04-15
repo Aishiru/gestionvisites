@@ -14,7 +14,9 @@ class OffrirType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('off_qte')
+            ->add('off_qte', null, [
+                'label' => 'Quantité'
+            ])
             //->add('rapportVisite')
             ->add('medicament', EntityType::class,[
                 'class' => Medicament::class,

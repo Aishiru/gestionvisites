@@ -46,7 +46,11 @@ class RapportVisiteType extends AbstractType
             ->add('offrirs', CollectionType::class, array(
                 'entry_type' => OffrirType::class,
                 'entry_options' => array('label' => false),
-                'required' => false,
+                'required' => true,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false,
             ))
         ;
     }

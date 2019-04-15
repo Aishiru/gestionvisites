@@ -89,14 +89,6 @@ class ApplicationRapportController extends AbstractController
     public function form(RapportVisite $rapport=null, Request $request, ObjectManager $manager){
         if (!$rapport) {
             $rapport = new RapportVisite();
-
-            $offrir1 = new Offrir();
-            $offrir2 = new Offrir();
-            $offrir3 = new Offrir();
-            
-            $rapport->addOffrir($offrir1);
-            $rapport->addOffrir($offrir2);
-            $rapport->addOffrir($offrir3);
         }
         $form = $this->createForm(RapportVisiteType::class, $rapport);
         
